@@ -60,6 +60,7 @@ unpacksources:
 	tar xvf $(CURDIR)/src/avr-libc-$(AVRLIBC_VER).tar  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/avrdude-$(AVRDUDE_VER).tar.gz -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/gdb-$(GDB_VER).tar.gz -C $(CURDIR)/build
+
 	
 #build-prereqs: build-gmp build-mpfr build-mpc
 #Because these prereq libraries are built as part of the gcc source, that don't need to be installed after being built
@@ -91,6 +92,15 @@ build-mpc:
 install-mpc:
 	cd build/mpc-$(MPC_VER)/tm  && sudo $(MAKE)  install;
 	
+build-binutils:
+	$(MKDIR) build/binutils-$(BINUTILS_VER)/tmp
+	cd build/binutils-$(BINUTILS_VER)/tmp && ../configure --target=avr --prefix=$(INSTALL_DIR) --disable-nsl --enable-install-libbfd --disable-werror
+	cd build/binutils-$(BINUTILS_VER)/tmp && $(MAKE)
+
+install-binutils:
+	cd build/binutils-$(BINUTILS_VER)/tmp && sudo $(MAKE) install
+
+
 build-linkprereqs:
 	#Build the libraries then symlink to tmp build directories for easier compilationg, because reference the libraries is not working yet. 
 	$(shell cd build/gcc-$(AVRGCC_VER);\
@@ -138,6 +148,6 @@ clean:
 	rm -rf src
 	rm -rf build
 
-distclean:
+
 
 
