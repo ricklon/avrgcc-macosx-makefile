@@ -13,7 +13,8 @@
 #setup defaults values
 MKDIR = mkdir -p
 BUILD_DIR = build
-#AUTOCONF = ${SHELL} /Users/rianders/Documents/projects/avrgcc-macosx-makefile/build/gmp-4.3.2/missing --run ./configure
+LIB_DIR = /usr/local/test/avr1
+INSTALL_DIR = /usr/local/test/avr1
 
 
 #Setup versions of the required software
@@ -63,89 +64,74 @@ unpacksources:
 #build-prereqs: build-gmp build-mpfr build-mpc
 #Because these prereq libraries are built as part of the gcc source, that don't need to be installed after being built
 build-gmp:
-	#gmp
-	$(shell cd build;\
-	cd gmp-$(GMP_VER);\
-	$(MKDIR) tmp;\
-	cd tmp;\
-	../configure --prefix=/usr/local/test/lib;\)
-	#cd build/gmp-$(GMP_VER)/tmp && $(MAKE)
-	#make check;\
-	
-
-test:
 	$(MKDIR) build/gmp-$(GMP_VER)/tmp
-	cd build/gmp-$(GMP_VER)/tmp &&  ../configure --prefix=/usr/local/test/lib
-	#cd build/gmp-$(GMP_VER)/tmp && $(MAKE)
-	
-#install-gmp:
-#	$(shell cd build/gmp-$(GMP_VER)/tmp;\
-#	echo $PWD;\
-#	sudo make install;\
-m	ls /usr/local/test/lib;\)
+	cd build/gmp-$(GMP_VER)/tmp &&  ../configure --prefix=$(LIB_DIR)
+	cd build/gmp-$(GMP_VER)/tmp && $(MAKE)
+	cd build/gmp-$(GMP_VER)/tmp && $(MAKE) check
+
+install-gmp:
+	cd build/gmp-$(GMP_VER)/tmp && sudo $(MAKE) install
 
 build-mpfr:
 	#mpfr
-	$(shell cd build/mpfr-$(MPFR_VER);\
-	$(MKDIR) tmp;\
-	cd tmp;\
-	echo 'made it to temp';\
-	../configure --prefix=/usr/local/test/lib --with-gmp-build=../../gmp-$(GMP_VER)/tmp;\)
-	make;\ 
-	make check;\
-#	sudo make install;\
+	$(MKDIR) build/mpfr-$(MPFR_VER)/tmp
+	cd  build/mpfr-$(MPFR_VER)/tmp && ../configure --prefix=$(LIB_DIR) --with-gmp-build=../../gmp-$(GMP_VER)/tmp
+	cd  build/mpfr-$(MPFR_VER)/tmp && $(MAKE)
+	cd  build/mpfr-$(MPFR_VER)/tmp && $(MAKE)  check
+
+install-mpfr:
+	cd  build/mpfr-$(MPFR_VER)/tmp && sudo $(MAKE) install
 
 build-mpc:	
 	#mpc
-	$(shell cd build/mpc-$(MPC_VER);\
-	$(MKDIR) tmp;\
-	cd tmp;\
-	../configure --prefix=/usr/local/test/lib --with-gmp=/usr/local/test/lib;\
-	make ;\
-#	sudo make install;\
-	)
+	$(MKDIR) build/mpc-$(MPC_VER)/tmp 
+	cd build/mpc-$(MPC_VER)/tmp  && ../configure --prefix=$(INSTALL_DIR) --with-gmp=$(LIB_DIR) --with-mpfr=$(LIB_DIR)
+	cd build/mpc-$(MPC_VER)/tmp  && $(MAKE)
+
+install-mpc:
+	cd build/mpc-$(MPC_VER)/tm  && sudo $(MAKE)  install;
 	
 build-linkprereqs:
 	#Build the libraries then symlink to tmp build directories for easier compilationg, because reference the libraries is not working yet. 
-	$(shell cd gcc-$(AVRG_VER);\
+	$(shell cd build/gcc-$(AVRGCC_VER);\
 	ln -s ../mpfr-$(MPFR_VER) mpfr;\
 	ln -s ../mpc-$(MPC_VER)/ mpc;\
 	ln -s ../gmp-$(GMP_VER)/ gmp;\)
 
 build-avrgccgxx:
-	$(shell cd gcc-$(AVRG_VER);\
-	$(MKDIR) tmp;\
-	cd tmp;\
-	#my custom library location is not working ;\
-	#../configure --target=avr --prefix=/usr/local/test/avr --disable-nsl --enable-languages=c,c++ --disable-libssp -with-gmp=/usr/local/test/lib/lib --with-mpfr=/usr/local/test/lib/lib  --with-mpc=/usr/local/test/lib/lib ;\
-	../configure --target=avr --prefix=/usr/local/test/avr --disable-nsl --enable-languages=c,c++ --disable-libssp ;\
-	make;\
-	sudo make install;\
-	/usr/local/test/avr/avr-gcc --version;\)
+	$(MKDIR) build/gcc-$(AVRGCC_VER)/tmp
+	#my custom library location is not working 
+	#../configure --target=avr --prefix=/usr/local/test/avr --disable-nsl --enable-languages=c,c++ --disable-libssp -with-gmp=/usr/local/test/lib/lib --with-mpfr=/usr/local/test/lib/lib  --with-mpc=/usr/local/test/lib/lib 
+	cd build/gcc-$(AVRGCC_VER)/tmp && ../configure --target=avr --prefix=$(INSTALL_DIR) --disable-nsl --enable-languages=c,c++ --disable-libssp
+	cd build/gcc-$(AVRGCC_VER)/tmp && $(MAKE)
+
+install-avrgccgxx:
+	cd build/gcc-$(AVRGCC_VER)/tmp && sudo $(MAKE) install
+	$(INSTALL_DIR)/bin/avr-gcc --version
 	
 build-avrlibc:
-	$(shell cd avr-libc-$(AVRLIBC_VER)/;\
-	$(MKDIR) tmp;\
-	cd tmp;\
-	../configure --build=`../config.guess` --host=avr --prefix=/usr/local/test/avr;\
-	make;\
-	sudo make install;\)
+	$(MKDIR) build/avr-libc-$(AVRLIBC_VER)/tmp
+	cd build/avr-libc-$(AVRLIBC_VER)/tmp && ../configure --build=`../config.guess` --host=avr --prefix=$(INSTALL_DIR)
+	cd build/avr-libc-$(AVRLIBC_VER)/tmp && $(MAKE)
+
+install-avrlibc:
+	cd build/avr-libc-$(AVRLIBC_VER)/tmp && sudo $(MAKE) install
 
 build-avrdude:
-	$(shell cd avrdude-$(AVRDUDE_VER)/;\
-	$(MKDIR) tmp;\
-	cd tmp;\
-	../configure --prefix=/usr/local/test/avr;\
-	make;\
-	sudo make install)
+	$(MKDIR) build/avrdude-$(AVRDUDE_VER)/tmp
+	cd  build/avrdude-$(AVRDUDE_VER)/tmp && ../configure --prefix=$(INSTALL_DIR)
+	cd  build/avrdude-$(AVRDUDE_VER)/tmp && $(MAKE)
+
+install-avrdude:
+	cd  build/avrdude-$(AVRDUDE_VER)/tmp && sudo $(MAKE) install
 
 build-avrgdb:
-	$(shell cd gdb-$(GDB_VER)/;\
-	$(MKDIR) tmp;\
-	cd tmp;\
-	../configure --target=avr --prefix=/usr/local/test/avr --disable-werror;\
-	make;\
-	sudo make install)
+	$(MKDIR) build/gdb-$(GDB_VER)/tmp
+	cd build/gdb-$(GDB_VER)/tmp  && ../configure --target=avr --prefix=$(INSTALL_DIR) --disable-werror
+	cd build/gdb-$(GDB_VER)/tmp  && $(MAKE)
+
+install-avrgdb:
+	cd build/gdb-$(GDB_VER)/tmp  && sudo $(MAKE) install
 
 
 clean:
