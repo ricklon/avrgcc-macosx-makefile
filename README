@@ -1,0 +1,172 @@
+# 
+# This is a makefile that allows you to configure the versions of the source code and install directories for avr-gcc#
+#
+#Assumptions: curl is installed
+#You are familiar sudo, because the install targets use sudo for installing to the system
+#You will put the executables in the PATH appropriately
+
+
+The Makefile has the following targets, and it's recommended to run them in this order:
+
+setup:
+getsources: setup
+unpacksources:
+build-gmp:
+install-gmp:
+build-mpfr:
+install-mpfr:
+build-mpc:	
+install-mpc:
+build-linkprereqs:
+build-avrgccgxx:
+install-avrgccgxx:
+build-avrlibc:
+install-avrlibc:
+build-avrdude:
+install-avrdude:
+build-avrgdb:
+install-avrgdb:
+
+The code should be working as expected at this point for compiling. Feel free to create tests to verify
+that it is correctly working.
+
+This process was based heavily off of this websites documentation:
+
+The following steps were used for the initial development of the Makeile.
+
+Get sources:
+curl -O ftp://ftp.gnu.org/gnu/gcc/gcc-4.5.1/gcc-g++-4.5.1.tar.gz
+curl -O ftp://ftp.gnu.org/gnu/gcc/gcc-4.5.1/gcc-core-4.5.1.tar.gz
+curl -O http://mirror.its.uidaho.edu/pub/savannah/avrdude/avrdude-5.9.tar.gz
+curl -O http://nongnu.askapache.com/avr-libc/avr-libc-1.7.0.tar.bz2
+curl -O http://ftp.gnu.org/gnu/gdb/gdb-7.1.tar.gz
+curl -O ftp://ftp.gmplib.org/pub/gmp-4.3.2/gmp-4.3.2.tar.bz2
+curl -O http://www.mpfr.org/mpfr-2.3.1/mpfr-2.3.1.tar.gz
+curl -O http://www.multiprecision.org/mpc/download/mpc-0.8.2.tar.gz
+curl -O ftp://ftp.gnu.org/gnu/binutils/binutils-2.20.1.tar.gz
+curl -O http://ftp.gnu.org/gnu/libtool/libtool-2.2.10.tar.gz
+
+
+
+
+Unpack Sources:
+
+
+bunzip2 ../src/gmp-4.3.2.tar.bz2
+tar xvf gmp-4.3.2.tar
+tar xvzf ../src/mpc-0.8.2.tar.gz
+tar xvzf ../src/mpfr-2.3.1.tar.gz
+
+#unpack gcc-4.5.1
+
+tar xvzf ../src/binutils-2.20.1.tar.gz
+tar xvzf ../src/gcc-core-4.5.1.tar.gz
+tar xvzf ../src/gcc-g++-4.5.1.tar.gz
+bunzip2 ../src/avr-libc-1.7.0.tar.bz2
+tar xvf ../src/avr-libc-1.7.0.tar
+tar xvzf ../src/avrdude-5.9.tar.gz
+tar xvzf ../src/gdb-7.1.tar.gz
+
+
+
+
+
+#Build prereqs for gcc,g++
+##GMP, MPFR and/or MPC are required for the following steps
+
+#gmp
+cd gmp-4.3.2/
+mkdir tmp
+cd tmp
+../configure --prefix=/usr/local/test/lib
+make 
+make check
+sudo make install
+ls /usr/local/test/lib
+
+#mpfr
+cd cd mpfr-2.3.1/
+mkdir tmp
+cd tmp
+../configure --prefix=/usr/local/test/lib --with-gmp-build=../../gmp-4.3.2/tmp
+#../configure --prefix=/usr/local/test/lib --with-gmp=/usr/local/test/lib/lib
+make
+make check
+sudo make install
+
+#mpc
+cd mpc-0.8.2
+mkdir tmp
+cd tmp
+./configure --prefix=/usr/local/test/lib --with-gmp=/usr/local/test/lib
+make 
+sudo make install
+
+#all of the above is needed, then this shortcut of link to the built source works
+cd gcc-4.5.1
+ln -s ../mpfr-2.3.1 mpfr
+ln -s ../mpc-0.8.2/ mpc
+ln -s ../gmp-4.3.2/ gmp
+
+
+#avr-binutils
+cd binutils-2.20.1
+mkdir tmp
+cd tmp
+../configure --target=avr --prefix=/usr/local/test/avr --disable-nsl --enable-install-libbfd --disable-werror
+make
+sudo make install
+#Confirm working
+/usr/local/test/avr/bin/avr-as --help
+
+
+
+#avr-gcc,g++
+#GMP, MPFR and/or MPC are required for the following steps
+#Build and simlink the directoris into the source tree
+cd gcc-4.5.1
+#symlink workaround
+ln -s ../mpfr-2.3.1 mpfr
+ln -s ../mpc-0.8.2/ mpc
+ln -s ../gmp-4.3.2/ gmp
+mkdir tmp
+cd tmp
+#my custom library location is not working 
+#../configure --target=avr --prefix=/usr/local/test/avr --disable-nsl --enable-languages=c,c++ --disable-libssp -with-gmp=/usr/local/test/lib/lib --with-mpfr=/usr/local/test/lib/lib  --with-mpc=/usr/local/test/lib/lib 
+../configure --target=avr --prefix=/usr/local/test/avr --disable-nsl --enable-languages=c,c++ --disable-libssp 
+make
+sudo make install
+/usr/local/test/avr/avr-gcc --version
+
+
+#avr-libc
+cd avr-libc-1.7.0/
+mkdir tmp
+cd tmp
+../configure --build=`../config.guess` --host=avr --prefix=/usr/local/test/avr
+make
+sudo make install
+
+
+
+#avrdude
+avrdude-5.9/
+mkdir tmp
+cd tmp
+../configure --prefix=/usr/local/test/avr
+make
+sudo make install
+
+#var-gdb
+cd gdb-7.1/
+mkdir tmp
+cd tmp
+../configure --target=avr --prefix=/usr/local/test/avr --disable-werror
+make
+sudo make install
+
+
+
+
+
+
