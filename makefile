@@ -13,6 +13,7 @@
 #setup defaults values
 MKDIR = mkdir -p
 BUILD_DIR = build
+#AUTOCONF = ${SHELL} /Users/rianders/Documents/projects/avrgcc-macosx-makefile/build/gmp-4.3.2/missing --run ./configure
 
 
 #Setup versions of the required software
@@ -28,8 +29,6 @@ GMP_VER = 4.3.2
 MPC_VER = 0.8.2
 MPFR_VER = 2.3.1
 
-
-
 all:
 
 setup:
@@ -40,7 +39,7 @@ getsources: setup
 	$(shell cd $(CURDIR)/src; \
 	curl -O ftp://ftp.gmplib.org/pub/gmp-$(GMP_VER)/gmp-$(GMP_VER).tar.bz2 ;\
 	curl -O http://www.mpfr.org/mpfr-$(MPFR_VER)/mpfr-$(MPFR_VER).tar.gz ;\
- 	curl -O http://www.multiprecision.org/mpc/download/mpc-$(MPC_VER).tar.gz ; \
+	curl -O http://www.multiprecision.org/mpc/download/mpc-$(MPC_VER).tar.gz ; \
 	curl -O ftp://ftp.gnu.org/gnu/binutils/binutils-$(BINUTILS_VER).tar.gz ; \
 	curl -O ftp://ftp.gnu.org/gnu/gcc/gcc-$(AVRGCC_VER)/gcc-g++-$(AVRGCC_VER).tar.gz ; \
 	curl -O ftp://ftp.gnu.org/gnu/gcc/gcc-$(AVRGCC_VER)/gcc-core-$(AVRGCC_VER).tar.gz ; \
@@ -48,9 +47,6 @@ getsources: setup
 	curl -O http://ftp.gnu.org/gnu/gdb/gdb-$(GDB_VER).tar.gz ; \
 	curl -O http://mirror.its.uidaho.edu/pub/savannah/avrdude/avrdude-$(AVRDUDE_VER).tar.gz ;)
 	
-
-
-
 unpacksources:
 	bunzip2 -kf $(CURDIR)/src/gmp-$(GMP_VER).tar.bz2 
 	tar xvf $(CURDIR)/src/gmp-$(GMP_VER).tar  -C $(CURDIR)/build
@@ -63,7 +59,7 @@ unpacksources:
 	tar xvf $(CURDIR)/src/avr-libc-$(AVRLIBC_VER).tar  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/avrdude-$(AVRDUDE_VER).tar.gz -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/gdb-$(GDB_VER).tar.gz -C $(CURDIR)/build
-
+	
 #build-prereqs: build-gmp build-mpfr build-mpc
 #Because these prereq libraries are built as part of the gcc source, that don't need to be installed after being built
 build-gmp:
@@ -72,15 +68,21 @@ build-gmp:
 	cd gmp-$(GMP_VER);\
 	$(MKDIR) tmp;\
 	cd tmp;\
-	../configure --prefix=/usr/local/test/lib;\
-	make ;\
-	make check;\)
+	../configure --prefix=/usr/local/test/lib;\)
+	#cd build/gmp-$(GMP_VER)/tmp && $(MAKE)
+	#make check;\
+	
 
+test:
+	$(MKDIR) build/gmp-$(GMP_VER)/tmp
+	cd build/gmp-$(GMP_VER)/tmp &&  ../configure --prefix=/usr/local/test/lib
+	#cd build/gmp-$(GMP_VER)/tmp && $(MAKE)
+	
 #install-gmp:
 #	$(shell cd build/gmp-$(GMP_VER)/tmp;\
 #	echo $PWD;\
 #	sudo make install;\
-#	ls /usr/local/test/lib;\)
+m	ls /usr/local/test/lib;\)
 
 build-mpfr:
 	#mpfr
