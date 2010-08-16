@@ -17,6 +17,8 @@ build-mpfr:
 install-mpfr:
 build-mpc:	
 install-mpc:
+build-binutils:
+install-binutils:
 build-linkprereqs:
 build-avrgccgxx:
 install-avrgccgxx:
