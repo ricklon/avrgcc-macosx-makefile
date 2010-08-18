@@ -10,6 +10,8 @@
 # You are running Mac OS X with Xcode ver=? Installed
 
 
+unexport LD_LIBRARY_PATH
+
 #setup defaults values
 MKDIR = mkdir -p
 BUILD_DIR = build
@@ -43,7 +45,7 @@ getsources: setup
 	curl -O http://www.mpfr.org/mpfr-$(MPFR_VER)/mpfr-$(MPFR_VER).tar.gz ;\
 	curl -O http://www.multiprecision.org/mpc/download/mpc-$(MPC_VER).tar.gz ; \
 	curl -O ftp://ftp.gnu.org/gnu/binutils/binutils-$(BINUTILS_VER).tar.gz ; \
-	curl -O http://ftp.gnu.org/gnu/libtool/libtool-$(LIBTOOL_VER).tar.gz
+	curl -O http://ftp.gnu.org/gnu/libtool/libtool-$(LIBTOOL_VER).tar.gz ; \
 	curl -O ftp://ftp.gnu.org/gnu/gcc/gcc-$(AVRGCC_VER)/gcc-g++-$(AVRGCC_VER).tar.gz ; \
 	curl -O ftp://ftp.gnu.org/gnu/gcc/gcc-$(AVRGCC_VER)/gcc-core-$(AVRGCC_VER).tar.gz ; \
 	curl -O http://nongnu.askapache.com/avr-libc/avr-libc-$(AVRLIBC_VER).tar.bz2 ; \
@@ -51,16 +53,14 @@ getsources: setup
 	curl -O http://mirror.its.uidaho.edu/pub/savannah/avrdude/avrdude-$(AVRDUDE_VER).tar.gz ;)
 	
 unpacksources:
-	bunzip2 -kf $(CURDIR)/src/gmp-$(GMP_VER).tar.bz2 
-	tar xvf $(CURDIR)/src/gmp-$(GMP_VER).tar  -C $(CURDIR)/build
+	tar xvjf $(CURDIR)/src/gmp-$(GMP_VER).tar.bz2  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/mpc-$(MPC_VER).tar.gz  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/mpfr-$(MPFR_VER).tar.gz  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/binutils-$(BINUTILS_VER).tar.gz  -C $(CURDIR)/build
-	tar xvzf $(CURDIR)/src/libtool-$(LIBTOOL_VER).tar.gz
+	tar xvzf $(CURDIR)/src/libtool-$(LIBTOOL_VER).tar.gz -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/gcc-core-$(AVRGCC_VER).tar.gz  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/gcc-g++-$(AVRGCC_VER).tar.gz  -C $(CURDIR)/build
-	bunzip2 -kf $(CURDIR)/src/avr-libc-$(AVRLIBC_VER).tar.bz2  
-	tar xvf $(CURDIR)/src/avr-libc-$(AVRLIBC_VER).tar  -C $(CURDIR)/build
+	tar xvjf $(CURDIR)/src/avr-libc-$(AVRLIBC_VER).tar.bz2  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/avrdude-$(AVRDUDE_VER).tar.gz -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/gdb-$(GDB_VER).tar.gz -C $(CURDIR)/build
 
@@ -93,7 +93,7 @@ build-mpc:
 	cd build/mpc-$(MPC_VER)/tmp  && $(MAKE)
 
 install-mpc:
-	cd build/mpc-$(MPC_VER)/tm  && sudo $(MAKE)  install;
+	cd build/mpc-$(MPC_VER)/tmp  && sudo $(MAKE)  install;
 	
 build-binutils:
 	$(MKDIR) build/binutils-$(BINUTILS_VER)/tmp
@@ -104,12 +104,12 @@ install-binutils:
 	cd build/binutils-$(BINUTILS_VER)/tmp && sudo $(MAKE) install
 
 build-libtool:
-        $(MKDIR) build/libtool-$(LIBTOOL_VER)/tmp
-        cd build/libtool-$(LIBTOOL_VER)/tmp && ../configure --target=avr --prefix=$(INSTALL_DIR) --disable-nsl --enable-install-libbfd --disable-werror
-        cd build/libtool-$(LIBTOOL_VER)/tmp && $(MAKE)
+	$(MKDIR) build/libtool-$(LIBTOOL_VER)/tmp
+	cd build/libtool-$(LIBTOOL_VER)/tmp && ../configure --target=avr --prefix=$(INSTALL_DIR) --disable-nsl --enable-install-libbfd --disable-werror
+	cd build/libtool-$(LIBTOOL_VER)/tmp && $(MAKE)
 
 install-libtool:
-        cd build/libtool-$(LIBTOOL_VER)/tmp && sudo $(MAKE) install
+	cd build/libtool-$(LIBTOOL_VER)/tmp && sudo $(MAKE) install
 
 
 
