@@ -29,6 +29,7 @@ GDB_VER = 7.1
 GMP_VER = 4.3.2
 MPC_VER = 0.8.2
 MPFR_VER = 2.3.1
+LIBTOOL_VER = 2.2.10
 
 all:
 
@@ -42,6 +43,7 @@ getsources: setup
 	curl -O http://www.mpfr.org/mpfr-$(MPFR_VER)/mpfr-$(MPFR_VER).tar.gz ;\
 	curl -O http://www.multiprecision.org/mpc/download/mpc-$(MPC_VER).tar.gz ; \
 	curl -O ftp://ftp.gnu.org/gnu/binutils/binutils-$(BINUTILS_VER).tar.gz ; \
+	curl -O http://ftp.gnu.org/gnu/libtool/libtool-$(LIBTOOL_VER).tar.gz
 	curl -O ftp://ftp.gnu.org/gnu/gcc/gcc-$(AVRGCC_VER)/gcc-g++-$(AVRGCC_VER).tar.gz ; \
 	curl -O ftp://ftp.gnu.org/gnu/gcc/gcc-$(AVRGCC_VER)/gcc-core-$(AVRGCC_VER).tar.gz ; \
 	curl -O http://nongnu.askapache.com/avr-libc/avr-libc-$(AVRLIBC_VER).tar.bz2 ; \
@@ -54,6 +56,7 @@ unpacksources:
 	tar xvzf $(CURDIR)/src/mpc-$(MPC_VER).tar.gz  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/mpfr-$(MPFR_VER).tar.gz  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/binutils-$(BINUTILS_VER).tar.gz  -C $(CURDIR)/build
+	tar xvzf $(CURDIR)/src/libtool-$(LIBTOOL_VER).tar.gz
 	tar xvzf $(CURDIR)/src/gcc-core-$(AVRGCC_VER).tar.gz  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/gcc-g++-$(AVRGCC_VER).tar.gz  -C $(CURDIR)/build
 	bunzip2 -kf $(CURDIR)/src/avr-libc-$(AVRLIBC_VER).tar.bz2  
@@ -99,6 +102,15 @@ build-binutils:
 
 install-binutils:
 	cd build/binutils-$(BINUTILS_VER)/tmp && sudo $(MAKE) install
+
+build-libtool:
+        $(MKDIR) build/libtool-$(LIBTOOL_VER)/tmp
+        cd build/libtool-$(LIBTOOL_VER)/tmp && ../configure --target=avr --prefix=$(INSTALL_DIR) --disable-nsl --enable-install-libbfd --disable-werror
+        cd build/libtool-$(LIBTOOL_VER)/tmp && $(MAKE)
+
+install-libtool:
+        cd build/libtool-$(LIBTOOL_VER)/tmp && sudo $(MAKE) install
+
 
 
 build-linkprereqs:
