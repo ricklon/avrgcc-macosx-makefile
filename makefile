@@ -129,7 +129,7 @@ build-avrgccgxx:
 	$(MKDIR) build/gcc-$(AVRGCC_VER)/tmp
 	#my custom library location is not working 
 	#../configure --target=avr --prefix=/usr/local/test/avr --disable-nsl --enable-languages=c,c++ --disable-libssp -with-gmp=/usr/local/test/lib/lib --with-mpfr=/usr/local/test/lib/lib  --with-mpc=/usr/local/test/lib/lib -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5 -no_compact_linkedit 
-	cd build/gcc-$(AVRGCC_VER)/tmp && ../configure --target=avr --prefix=$(INSTALL_DIR) --disable-nsl --enable-languages=c,c++ --disable-libssp
+	cd build/gcc-$(AVRGCC_VER)/tmp && ../configure --target=avr --prefix=$(INSTALL_DIR) --disable-nsl --enable-languages=c,c++ --disable-libssp --disable-dependency-tracking --disable-werror --with-dwarf2 --enable-thread=single 
 	cd build/gcc-$(AVRGCC_VER)/tmp && time $(MAKE)
 
 install-avrgccgxx:
