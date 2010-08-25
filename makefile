@@ -15,8 +15,9 @@ unexport LD_LIBRARY_PATH
 #setup defaults values
 MKDIR = mkdir -p
 BUILD_DIR = build
-LIB_DIR = /usr/local/test/avr1
-INSTALL_DIR = /usr/local/test/avr1
+OUT_DIR = out
+LIB_DIR = $(CURDIR)/$(OUT_DIR)
+INSTALL_DIR = $(CURDIR)/$(OUT_DIR)
 
 
 #Setup versions of the required software
@@ -77,7 +78,7 @@ check-gmp:
 	cd build/gmp-$(GMP_VER)/tmp && $(MAKE) check
 
 install-gmp:
-	cd build/gmp-$(GMP_VER)/tmp && sudo $(MAKE) install
+	cd build/gmp-$(GMP_VER)/tmp &&  $(MAKE) install
 
 build-mpfr:
 	#mpfr
@@ -89,7 +90,7 @@ check-mpfr:
 	cd  build/mpfr-$(MPFR_VER)/tmp && $(MAKE)  check
 
 install-mpfr:
-	cd  build/mpfr-$(MPFR_VER)/tmp && sudo $(MAKE) install
+	cd  build/mpfr-$(MPFR_VER)/tmp &&  $(MAKE) install
 
 build-mpc:	
 	#mpc
@@ -98,7 +99,7 @@ build-mpc:
 	cd build/mpc-$(MPC_VER)/tmp  && time $(MAKE)
 
 install-mpc:
-	cd build/mpc-$(MPC_VER)/tmp  && sudo $(MAKE)  install;
+	cd build/mpc-$(MPC_VER)/tmp  &&  $(MAKE)  install;
 	
 build-binutils:
 	$(MKDIR) build/binutils-$(BINUTILS_VER)/tmp
@@ -106,7 +107,7 @@ build-binutils:
 	cd build/binutils-$(BINUTILS_VER)/tmp && time $(MAKE)
 
 install-binutils:
-	cd build/binutils-$(BINUTILS_VER)/tmp && sudo $(MAKE) install
+	cd build/binutils-$(BINUTILS_VER)/tmp &&  $(MAKE) install
 
 build-libtool:
 	$(MKDIR) build/libtool-$(LIBTOOL_VER)/tmp
@@ -114,7 +115,7 @@ build-libtool:
 	cd build/libtool-$(LIBTOOL_VER)/tmp && time $(MAKE)
 
 install-libtool:
-	cd build/libtool-$(LIBTOOL_VER)/tmp && sudo $(MAKE) install
+	cd build/libtool-$(LIBTOOL_VER)/tmp &&  $(MAKE) install
 
 
 
@@ -133,7 +134,7 @@ build-avrgccgxx:
 	cd build/gcc-$(AVRGCC_VER)/tmp && time $(MAKE)
 
 install-avrgccgxx:
-	cd build/gcc-$(AVRGCC_VER)/tmp && sudo $(MAKE) install
+	cd build/gcc-$(AVRGCC_VER)/tmp &&  $(MAKE) install
 	$(INSTALL_DIR)/bin/avr-gcc --version
 	
 build-avrlibc:
@@ -142,7 +143,7 @@ build-avrlibc:
 	cd build/avr-libc-$(AVRLIBC_VER)/tmp && time $(MAKE)
 
 install-avrlibc:
-	cd build/avr-libc-$(AVRLIBC_VER)/tmp && sudo $(MAKE) install
+	cd build/avr-libc-$(AVRLIBC_VER)/tmp &&  $(MAKE) install
 
 build-avrdude:
 	$(MKDIR) build/avrdude-$(AVRDUDE_VER)/tmp
@@ -150,7 +151,7 @@ build-avrdude:
 	cd  build/avrdude-$(AVRDUDE_VER)/tmp && time $(MAKE)
 
 install-avrdude:
-	cd  build/avrdude-$(AVRDUDE_VER)/tmp && sudo $(MAKE) install
+	cd  build/avrdude-$(AVRDUDE_VER)/tmp &&  $(MAKE) install
 
 build-avrgdb:
 	$(MKDIR) build/gdb-$(GDB_VER)/tmp
@@ -158,7 +159,7 @@ build-avrgdb:
 	cd build/gdb-$(GDB_VER)/tmp  && time $(MAKE)
 
 install-avrgdb:
-	cd build/gdb-$(GDB_VER)/tmp  && sudo $(MAKE) install
+	cd build/gdb-$(GDB_VER)/tmp  &&  $(MAKE) install
 
 
 clean:
