@@ -71,7 +71,9 @@ unpacksources:
 build-gmp:
 	$(MKDIR) build/gmp-$(GMP_VER)/tmp
 	cd build/gmp-$(GMP_VER)/tmp &&  ../configure --prefix=$(LIB_DIR)
-	cd build/gmp-$(GMP_VER)/tmp && $(MAKE)
+	cd build/gmp-$(GMP_VER)/tmp && time $(MAKE)
+
+check-gmp:
 	cd build/gmp-$(GMP_VER)/tmp && $(MAKE) check
 
 install-gmp:
@@ -81,7 +83,9 @@ build-mpfr:
 	#mpfr
 	$(MKDIR) build/mpfr-$(MPFR_VER)/tmp
 	cd  build/mpfr-$(MPFR_VER)/tmp && ../configure --prefix=$(LIB_DIR) --with-gmp-build=../../gmp-$(GMP_VER)/tmp
-	cd  build/mpfr-$(MPFR_VER)/tmp && $(MAKE)
+	cd  build/mpfr-$(MPFR_VER)/tmp && time $(MAKE)
+
+check-mpfr:
 	cd  build/mpfr-$(MPFR_VER)/tmp && $(MAKE)  check
 
 install-mpfr:
@@ -91,7 +95,7 @@ build-mpc:
 	#mpc
 	$(MKDIR) build/mpc-$(MPC_VER)/tmp 
 	cd build/mpc-$(MPC_VER)/tmp  && ../configure --prefix=$(INSTALL_DIR) --with-gmp=$(LIB_DIR) --with-mpfr=$(LIB_DIR)
-	cd build/mpc-$(MPC_VER)/tmp  && $(MAKE)
+	cd build/mpc-$(MPC_VER)/tmp  && time $(MAKE)
 
 install-mpc:
 	cd build/mpc-$(MPC_VER)/tmp  && sudo $(MAKE)  install;
@@ -99,7 +103,7 @@ install-mpc:
 build-binutils:
 	$(MKDIR) build/binutils-$(BINUTILS_VER)/tmp
 	cd build/binutils-$(BINUTILS_VER)/tmp && ../configure --target=avr --prefix=$(INSTALL_DIR) --disable-nsl --enable-install-libbfd --disable-werror
-	cd build/binutils-$(BINUTILS_VER)/tmp && $(MAKE)
+	cd build/binutils-$(BINUTILS_VER)/tmp && time $(MAKE)
 
 install-binutils:
 	cd build/binutils-$(BINUTILS_VER)/tmp && sudo $(MAKE) install
@@ -107,7 +111,7 @@ install-binutils:
 build-libtool:
 	$(MKDIR) build/libtool-$(LIBTOOL_VER)/tmp
 	cd build/libtool-$(LIBTOOL_VER)/tmp && ../configure --target=avr --prefix=$(INSTALL_DIR) --disable-nsl --enable-install-libbfd --disable-werror
-	cd build/libtool-$(LIBTOOL_VER)/tmp && $(MAKE)
+	cd build/libtool-$(LIBTOOL_VER)/tmp && time $(MAKE)
 
 install-libtool:
 	cd build/libtool-$(LIBTOOL_VER)/tmp && sudo $(MAKE) install
@@ -126,7 +130,7 @@ build-avrgccgxx:
 	#my custom library location is not working 
 	#../configure --target=avr --prefix=/usr/local/test/avr --disable-nsl --enable-languages=c,c++ --disable-libssp -with-gmp=/usr/local/test/lib/lib --with-mpfr=/usr/local/test/lib/lib  --with-mpc=/usr/local/test/lib/lib -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5 -no_compact_linkedit 
 	cd build/gcc-$(AVRGCC_VER)/tmp && ../configure --target=avr --prefix=$(INSTALL_DIR) --disable-nsl --enable-languages=c,c++ --disable-libssp
-	cd build/gcc-$(AVRGCC_VER)/tmp && $(MAKE)
+	cd build/gcc-$(AVRGCC_VER)/tmp && time $(MAKE)
 
 install-avrgccgxx:
 	cd build/gcc-$(AVRGCC_VER)/tmp && sudo $(MAKE) install
@@ -135,7 +139,7 @@ install-avrgccgxx:
 build-avrlibc:
 	$(MKDIR) build/avr-libc-$(AVRLIBC_VER)/tmp
 	cd build/avr-libc-$(AVRLIBC_VER)/tmp && ../configure --build=`../config.guess` --host=avr --prefix=$(INSTALL_DIR)
-	cd build/avr-libc-$(AVRLIBC_VER)/tmp && $(MAKE)
+	cd build/avr-libc-$(AVRLIBC_VER)/tmp && time $(MAKE)
 
 install-avrlibc:
 	cd build/avr-libc-$(AVRLIBC_VER)/tmp && sudo $(MAKE) install
@@ -143,7 +147,7 @@ install-avrlibc:
 build-avrdude:
 	$(MKDIR) build/avrdude-$(AVRDUDE_VER)/tmp
 	cd  build/avrdude-$(AVRDUDE_VER)/tmp && ../configure --prefix=$(INSTALL_DIR)
-	cd  build/avrdude-$(AVRDUDE_VER)/tmp && $(MAKE)
+	cd  build/avrdude-$(AVRDUDE_VER)/tmp && time $(MAKE)
 
 install-avrdude:
 	cd  build/avrdude-$(AVRDUDE_VER)/tmp && sudo $(MAKE) install
@@ -151,7 +155,7 @@ install-avrdude:
 build-avrgdb:
 	$(MKDIR) build/gdb-$(GDB_VER)/tmp
 	cd build/gdb-$(GDB_VER)/tmp  && ../configure --target=avr --prefix=$(INSTALL_DIR) --disable-werror
-	cd build/gdb-$(GDB_VER)/tmp  && $(MAKE)
+	cd build/gdb-$(GDB_VER)/tmp  && time $(MAKE)
 
 install-avrgdb:
 	cd build/gdb-$(GDB_VER)/tmp  && sudo $(MAKE) install
@@ -160,7 +164,3 @@ install-avrgdb:
 clean:
 	rm -rf src
 	rm -rf build
-
-
-
-
