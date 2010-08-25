@@ -33,7 +33,8 @@ MPC_VER = 0.8.2
 MPFR_VER = 2.3.1
 LIBTOOL_VER = 2.2.10
 
-all:
+#Doesn't include getsources, and unpacksource, need a rule for that.
+all: build-gmp install-gmp build-mpfr install-mpfr build-mpc install-mpc build-binutils install-binutils build-libtool install-libtool build-linkprereqs build-avrgccgxx install-avrgccgxx build-avrlibc install-avrlibc
 
 setup:
 	$(MKDIR) $(CURDIR)/src
