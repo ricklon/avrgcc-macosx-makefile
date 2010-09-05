@@ -1,0 +1,26 @@
+# Put your custom version and overide default directories as needed
+#
+#
+
+#setup defaults values
+#BUILD_DIR ?= build
+#OUT_DIR ?= out
+#LIB_DIR ?= $(CURDIR)/$(OUT_DIR)
+#INSTALL_DIR ?= $(CURDIR)/$(OUT_DIR)
+
+
+#Setup versions of the required software
+#gcc-core
+AVRGCC_VER = 4.5.1
+#gcc-g++, should normally be the same as AVRGCC_VER
+#AVRGXX_VER = 4.5.1
+AVRLIBC_VER = 1.7.0
+BINUTILS_VER = 2.20.1
+AVRDUDE_VER = 5.4
+GDB_VER = 7.1
+GMP_VER = 4.3.2
+MPC_VER = 0.8.2
+MPFR_VER = 2.3.1
+LIBTOOL_VER = 2.2.10
+
+include ./Makefile.master
