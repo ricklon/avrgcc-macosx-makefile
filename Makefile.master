@@ -42,13 +42,14 @@ AVRGCC_CONF ?= --disable-nsl --enable-languages=c,c++ --disable-libssp --disable
 
 
 #Doesn't include getsources, and unpacksource, need a rule for that.
-all: build-gmp install-gmp build-mpfr install-mpfr build-mpc install-mpc build-binutils install-binutils build-libtool install-libtool build-linkprereqs build-avrgccgxx install-avrgccgxx build-avrlibc install-avrlibc
+all: unpacksources.t build-gmp install-gmp build-mpfr install-mpfr build-mpc install-mpc build-binutils install-binutils build-libtool install-libtool build-linkprereqs build-avrgccgxx install-avrgccgxx build-avrlibc install-avrlibc
 
-setup:
+setup.t:
 	$(MKDIR) $(CURDIR)/src
 	$(MKDIR) $(CURDIR)/build
+	touch setup.t
 
-getsources: setup
+getsources.t: setup.t
 	$(shell cd $(CURDIR)/src; \
 	curl -O ftp://ftp.gmplib.org/pub/gmp-$(GMP_VER)/gmp-$(GMP_VER).tar.bz2 ;\
 	curl -O http://www.mpfr.org/mpfr-$(MPFR_VER)/mpfr-$(MPFR_VER).tar.gz ;\
@@ -63,8 +64,9 @@ getsources: setup
 	curl -L  http://sourceforge.net/projects/libusb/files/libusb-0.1%20%28LEGACY%29/$(LIBUSB_VER)/libusb-$(LIBUSB_VER).tar.gz/download -o libusb-$(LIBUSB_VER).tar.gz ;\
 	curl -O http://garr.dl.sourceforge.net/project/avarice/avarice/avarice-$(AVARICE_VER)/avarice-$(AVARICE_VER).tar.bz2 ;\
 	curl -L -O http://download.savannah.gnu.org/releases/simulavr/simulavr-$(SIMULAVR_VER).tar.gz ;)
+	touch getsources.t
 	
-unpacksources:
+unpacksources.t: getsources.t
 	tar xvjf $(CURDIR)/src/gmp-$(GMP_VER).tar.bz2  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/mpc-$(MPC_VER).tar.gz  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/mpfr-$(MPFR_VER).tar.gz  -C $(CURDIR)/build
@@ -78,6 +80,7 @@ unpacksources:
 	tar xvzf $(CURDIR)/src/libusb-$(LIBUSB_VER).tar.gz -C $(CURDIR)/build
 	tar xvjf $(CURDIR)/src/avarice-$(AVARICE_VER).tar.bz2 -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/simulavr-$(SIMULAVR_VER).tar.gz -C $(CURDIR)/build
+	touch unpacksources.t
 
 	
 #build-prereqs: build-gmp build-mpfr build-mpc
@@ -174,7 +177,7 @@ install-avrgdb:
 
 build-avarice:
 	$(MKDIR) build/avarice-$(AVARICE_VER)/tmp
-	cd build/avarice-$(AVARICE_VER)/tmp &&  ../configure --prefix=$(LIB_DIR)
+	cd build/avarice-$(AVARICE_VER)/tmp &&  ../configure --prefix=$(INSTALL_DIR)
 	cd build/avarice-$(AVARICE_VER)/tmp && time $(MAKE)
 	
 install-avarice:
@@ -182,7 +185,7 @@ install-avarice:
 	
 build-libusb:
 	$(MKDIR) build/libusb-$(LIBUSB_VER)/tmp
-	cd build/libusb-$(LIBUSB_VER)/tmp  && ../configure --prefix=$(LIB_DIR)
+	cd build/libusb-$(LIBUSB_VER)/tmp  && ../configure --prefix=$(INSTALL_DIR)
 	cd build/libusb-$(LIBUSB_VER)/tmp  && time $(MAKE)
 
 install-libusb:
@@ -190,14 +193,21 @@ install-libusb:
 
 build-simulavr:
 	$(MKDIR) build/simulavr-$(SIMULAVR_VER)/tmp
-	cd build/simulavr-$(SIMULAVR_VER)/tmp && ../configure --prefix=$(LIB_DIR)
+	cd build/simulavr-$(SIMULAVR_VER)/tmp && ../configure --prefix=$(INSTALL_DIR)
 	cd build/simulavr-$(SIMULAVR_VER)/tmp && time $(MAKE)
 
 install-simulavr:
 	cd build/simulavr-$(SIMULAVR_VER)/tmp  && time $(MAKE) install
 
-
-
 clean:
 	rm -rf src
 	rm -rf build
+	rm -f *.t
+	
+distclean:	clean
+	rm -rf $(INSTALL_DIR)
+	
+help:
+	@echo "Help info to go here. maybe print out the read me."
+	
+	
