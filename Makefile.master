@@ -10,29 +10,33 @@
 # You are running Mac OS X with Xcode ver=? Installed
 
 
-unexport LD_LIBRARY_PATH
+#unexport LD_LIBRARY_PATH
 
 #setup defaults values
 MKDIR = mkdir -p
-BUILD_DIR = build
-OUT_DIR = out
-LIB_DIR = $(CURDIR)/$(OUT_DIR)
-INSTALL_DIR = $(CURDIR)/$(OUT_DIR)
+BUILD_DIR ?= build
+OUT_DIR ?= out
+LIB_DIR ?= $(CURDIR)/$(OUT_DIR)
+INSTALL_DIR ?= $(CURDIR)/$(OUT_DIR)
 
 
 #Setup versions of the required software
 #gcc-core
-AVRGCC_VER = 4.5.1
+AVRGCC_VER ?= 4.5.1
 #gcc-g++, should normally be the same as AVRGCC_VER
 #AVRGXX_VER = 4.5.1
-AVRLIBC_VER = 1.7.0
-BINUTILS_VER = 2.20.1
-AVRDUDE_VER = 5.4
-GDB_VER = 7.1
-GMP_VER = 4.3.2
-MPC_VER = 0.8.2
-MPFR_VER = 2.3.1
-LIBTOOL_VER = 2.2.10
+AVRLIBC_VER ?= 1.7.0
+BINUTILS_VER ?= 2.20.1
+AVRDUDE_VER ?= 5.4
+GDB_VER ?= 7.1
+GMP_VER ?= 4.3.2
+MPC_VER ?= 0.8.2
+MPFR_VER ?= 2.3.1
+LIBTOOL_VER ?= 2.2.10
+AVARICE_VER ?= 2.10
+LIBUSB_VER ?= 0.1.12
+SIMULAVR_VER ?= 0.1.2.6
+
 
 #Doesn't include getsources, and unpacksource, need a rule for that.
 all: build-gmp install-gmp build-mpfr install-mpfr build-mpc install-mpc build-binutils install-binutils build-libtool install-libtool build-linkprereqs build-avrgccgxx install-avrgccgxx build-avrlibc install-avrlibc
@@ -52,7 +56,10 @@ getsources: setup
 	curl -O ftp://ftp.gnu.org/gnu/gcc/gcc-$(AVRGCC_VER)/gcc-core-$(AVRGCC_VER).tar.gz ; \
 	curl -O http://nongnu.askapache.com/avr-libc/avr-libc-$(AVRLIBC_VER).tar.bz2 ; \
 	curl -O http://ftp.gnu.org/gnu/gdb/gdb-$(GDB_VER).tar.gz ; \
-	curl -O http://mirror.its.uidaho.edu/pub/savannah/avrdude/avrdude-$(AVRDUDE_VER).tar.gz ;)
+	curl -O http://mirror.its.uidaho.edu/pub/savannah/avrdude/avrdude-$(AVRDUDE_VER).tar.gz ;\
+	curl -L  http://sourceforge.net/projects/libusb/files/libusb-0.1%20%28LEGACY%29/$(LIBUSB_VER)/libusb-$(LIBUSB_VER).tar.gz/download -o libusb-$(LIBUSB_VER).tar.gz ;\
+	curl -O http://garr.dl.sourceforge.net/project/avarice/avarice/avarice-$(AVARICE_VER)/avarice-$(AVARICE_VER).tar.bz2 ;\
+	curl -L -O http://download.savannah.gnu.org/releases/simulavr/simulavr-$(SIMULAVR_VER).tar.gz ;)
 	
 unpacksources:
 	tar xvjf $(CURDIR)/src/gmp-$(GMP_VER).tar.bz2  -C $(CURDIR)/build
@@ -65,6 +72,9 @@ unpacksources:
 	tar xvjf $(CURDIR)/src/avr-libc-$(AVRLIBC_VER).tar.bz2  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/avrdude-$(AVRDUDE_VER).tar.gz -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/gdb-$(GDB_VER).tar.gz -C $(CURDIR)/build
+	tar xvzf $(CURDIR)/src/libusb-$(LIBUSB_VER).tar.gz -C $(CURDIR)/build
+	tar xvjf $(CURDIR)/src/avarice-$(AVARICE_VER).tar.bz2 -C $(CURDIR)/build
+	tar xvzf $(CURDIR)/src/simulavr-$(SIMULAVR_VER).tar.gz -C $(CURDIR)/build
 
 	
 #build-prereqs: build-gmp build-mpfr build-mpc
@@ -160,6 +170,31 @@ build-avrgdb:
 
 install-avrgdb:
 	cd build/gdb-$(GDB_VER)/tmp  &&  $(MAKE) install
+
+build-avarice:
+	$(MKDIR) build/avarice-$(AVERICE_VER)/tmp
+	cd build/avarice-$(AVERICE_VER)/tmp &&  ../configure --prefix=$(LIB_DIR)
+	cd build/avarice-$(AVERICE_VER)/tmp && time $(MAKE)
+	
+install-avarice:
+	cd build/avarice-$(AVERICE_VER)/tmp && time $(MAKE) install
+	
+build-libusb:
+	$(MKDIR) build/libusb-$(LIBUSB_VER)/tmp
+	cd build/libusb-$(LIBUSB_VER)/tmp  && ../configure --prefix=$(LIB_DIR)
+	cd build/libusb-$(LIBUSB_VER)/tmp  && time $(MAKE)
+
+install-libusb:
+	cd build/libusb-$(LIBUSB_VER)/tmp  && time $(MAKE) install
+
+build-simulavr:
+	$(MKDIR) build/simulavr-$(SIMULAVR_VER)/tmp
+	cd build/simulavr-$(SIMULAVR_VER)/tmp && ../configure --prefix=$(LIB_DIR)
+	cd build/simulavr-$(SIMULAVR_VER)/tmp && time $(MAKE)
+
+install-simulavr:
+	cd build/simulavr-$(SIMULAVR_VER)/tmp  && time $(MAKE) install
+
 
 
 clean:

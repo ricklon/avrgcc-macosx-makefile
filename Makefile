@@ -22,5 +22,9 @@ GMP_VER = 4.3.2
 MPC_VER = 0.8.2
 MPFR_VER = 2.3.1
 LIBTOOL_VER = 2.2.10
+LIBTOOL_VER = 2.2.10
+AVARICE_VER = 2.10
+LIBUSB_VER = 0.1.12
+SIMULAVR = 0.1.2.6
 
 include ./Makefile.master
