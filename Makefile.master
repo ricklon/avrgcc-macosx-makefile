@@ -37,6 +37,9 @@ AVARICE_VER ?= 2.10
 LIBUSB_VER ?= 0.1.12
 SIMULAVR_VER ?= 0.1.2.6
 
+#configure settings
+AVRGCC_CONF ?= --disable-nsl --enable-languages=c,c++ --disable-libssp --disable-dependency-tracking --disable-werror --with-dwarf2 --enable-thread=single 
+
 
 #Doesn't include getsources, and unpacksource, need a rule for that.
 all: build-gmp install-gmp build-mpfr install-mpfr build-mpc install-mpc build-binutils install-binutils build-libtool install-libtool build-linkprereqs build-avrgccgxx install-avrgccgxx build-avrlibc install-avrlibc
@@ -138,9 +141,7 @@ build-linkprereqs:
 
 build-avrgccgxx:
 	$(MKDIR) build/gcc-$(AVRGCC_VER)/tmp
-	#my custom library location is not working 
-	#../configure --target=avr --prefix=/usr/local/test/avr --disable-nsl --enable-languages=c,c++ --disable-libssp -with-gmp=/usr/local/test/lib/lib --with-mpfr=/usr/local/test/lib/lib  --with-mpc=/usr/local/test/lib/lib -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5 -no_compact_linkedit 
-	cd build/gcc-$(AVRGCC_VER)/tmp && ../configure --target=avr --prefix=$(INSTALL_DIR) --disable-nsl --enable-languages=c,c++ --disable-libssp --disable-dependency-tracking --disable-werror --with-dwarf2 --enable-thread=single 
+	cd build/gcc-$(AVRGCC_VER)/tmp && ../configure --target=avr --prefix=$(INSTALL_DIR) $(AVRGCC_CONF) 
 	cd build/gcc-$(AVRGCC_VER)/tmp && time $(MAKE)
 
 install-avrgccgxx:
