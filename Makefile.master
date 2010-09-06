@@ -172,12 +172,12 @@ install-avrgdb:
 	cd build/gdb-$(GDB_VER)/tmp  &&  $(MAKE) install
 
 build-avarice:
-	$(MKDIR) build/avarice-$(AVERICE_VER)/tmp
-	cd build/avarice-$(AVERICE_VER)/tmp &&  ../configure --prefix=$(LIB_DIR)
-	cd build/avarice-$(AVERICE_VER)/tmp && time $(MAKE)
+	$(MKDIR) build/avarice-$(AVARICE_VER)/tmp
+	cd build/avarice-$(AVARICE_VER)/tmp &&  ../configure --prefix=$(LIB_DIR)
+	cd build/avarice-$(AVARICE_VER)/tmp && time $(MAKE)
 	
 install-avarice:
-	cd build/avarice-$(AVERICE_VER)/tmp && time $(MAKE) install
+	cd build/avarice-$(AVARICE_VER)/tmp && time $(MAKE) install
 	
 build-libusb:
 	$(MKDIR) build/libusb-$(LIBUSB_VER)/tmp
