@@ -37,7 +37,8 @@ MPFR_CONF = --disable-shared --with-gmp=$(LIB_DIR)
 #AVRGCC_CONF = --disable-nsl --enable-languages=c,c++ --disable-libssp --disable-dependency-tracking --disable-werror --with-dwarf2 --enable-thread=single 
 #http://gcc.gnu.org/bugzilla/show_bug.cgi?id=41180
 #--build=x86_64-apple-darwin10 --host=x86_64-apple-darwin10 ##--target=x86_64-apple-darwin10
-#Also, claims need CC -m32
+#Also, claims need CC -m32 , not tried
+#Did the following an success compile occured, edit line 76 in gcc/cp/Make-lang.in to remove tree-inline.o from CXX_C_OBJS  , from this recomendation: https://trac.macports.org/ticket/20816
 
 AVRGCC_CONF = --disable-nsl --enable-languages=c,c++ --disable-libssp --disable-dependency-tracking --disable-werror --with-dwarf2 --enable-thread=single --with-gmp=$(LIB_DIR) --with-mpfr=$(LIB_DIR) --build=x86_64-apple-darwin10 --host=x86_64-apple-darwin10
 include ./Makefile.master
