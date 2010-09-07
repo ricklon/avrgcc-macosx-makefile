@@ -70,6 +70,7 @@ unpacksources.t: getsources.t
 	tar xvjf $(CURDIR)/src/gmp-$(GMP_VER).tar.bz2  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/mpc-$(MPC_VER).tar.gz  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/mpfr-$(MPFR_VER).tar.gz  -C $(CURDIR)/build
+	cd  $(CURDIR)/build/mpfr-$(MPFR_VER) && curl http://www.mpfr.org/mpfr-$(MPFR_VER)/allpatches | patch -N -Z -p1
 	tar xvzf $(CURDIR)/src/binutils-$(BINUTILS_VER).tar.gz  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/libtool-$(LIBTOOL_VER).tar.gz -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/gcc-core-$(AVRGCC_VER).tar.gz  -C $(CURDIR)/build
@@ -87,7 +88,7 @@ unpacksources.t: getsources.t
 #Because these prereq libraries are built as part of the gcc source, that don't need to be installed after being built
 build-gmp:
 	$(MKDIR) build/gmp-$(GMP_VER)/tmp
-	cd build/gmp-$(GMP_VER)/tmp &&  ../configure --prefix=$(LIB_DIR)
+	cd build/gmp-$(GMP_VER)/tmp &&  ../configure --prefix=$(LIB_DIR) --build=avr $(GMP_CONF)
 	cd build/gmp-$(GMP_VER)/tmp && time $(MAKE)
 
 check-gmp:
@@ -99,7 +100,7 @@ install-gmp:
 build-mpfr:
 	#mpfr
 	$(MKDIR) build/mpfr-$(MPFR_VER)/tmp
-	cd  build/mpfr-$(MPFR_VER)/tmp && ../configure --prefix=$(LIB_DIR) --with-gmp-build=../../gmp-$(GMP_VER)/tmp
+	cd  build/mpfr-$(MPFR_VER)/tmp && ../configure --prefix=$(LIB_DIR) --target=avr $(MPFR_CONF)
 	cd  build/mpfr-$(MPFR_VER)/tmp && time $(MAKE)
 
 check-mpfr:
@@ -119,7 +120,7 @@ install-mpc:
 	
 build-binutils:
 	$(MKDIR) build/binutils-$(BINUTILS_VER)/tmp
-	cd build/binutils-$(BINUTILS_VER)/tmp && ../configure --target=avr --prefix=$(INSTALL_DIR) --disable-nsl --enable-install-libbfd --disable-werror
+	cd build/binutils-$(BINUTILS_VER)/tmp && ../configure --target=avr --prefix=$(INSTALL_DIR) $(BINUTILS_CONF)
 	cd build/binutils-$(BINUTILS_VER)/tmp && time $(MAKE)
 
 install-binutils:
@@ -199,6 +200,11 @@ build-simulavr:
 install-simulavr:
 	cd build/simulavr-$(SIMULAVR_VER)/tmp  && time $(MAKE) install
 
+
+env:
+	@echo "ENV Settings"
+	@echo LD_LIBRARY_PATH: $LD_LIBRARY_PATH
+	
 clean:
 	rm -rf src
 	rm -rf build
