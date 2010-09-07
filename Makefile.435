@@ -34,6 +34,10 @@ SIMULAVR = 0.1.2.6
 BINUTILS_CONF = --disable-nsl --enable-install-libbfd --disable-werror
 GMP_CONF = --disable-shared
 MPFR_CONF = --disable-shared --with-gmp=$(LIB_DIR)
-AVRGCC_CONF = --disable-nsl --enable-languages=c,c++ --disable-libssp --disable-dependency-tracking --disable-werror --with-dwarf2 --enable-thread=single 
+#AVRGCC_CONF = --disable-nsl --enable-languages=c,c++ --disable-libssp --disable-dependency-tracking --disable-werror --with-dwarf2 --enable-thread=single 
+#http://gcc.gnu.org/bugzilla/show_bug.cgi?id=41180
+#--build=x86_64-apple-darwin10 --host=x86_64-apple-darwin10 ##--target=x86_64-apple-darwin10
+#Also, claims need CC -m32
 
+AVRGCC_CONF = --disable-nsl --enable-languages=c,c++ --disable-libssp --disable-dependency-tracking --disable-werror --with-dwarf2 --enable-thread=single --with-gmp=$(LIB_DIR) --with-mpfr=$(LIB_DIR) --build=x86_64-apple-darwin10 --host=x86_64-apple-darwin10
 include ./Makefile.master
