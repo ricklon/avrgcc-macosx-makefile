@@ -44,5 +44,5 @@ AVRGCC_CONF = --disable-nsl --enable-languages=c,c++ --disable-libssp --disable-
 include ./Makefile.master
 
 localpatches:
-	cd $(BUILD_DIR)gcc-4.3.5/gcc/cp && patch $(BUILD_DIR)/gcc-$(AVRGCC_VER)/gcc/cp/Make-lang.in libbackend.patch
+	patch  $(BUILD_DIR)/gcc-$(AVRGCC_VER)/gcc/cp/Make-lang.in libbackend.patch
  
