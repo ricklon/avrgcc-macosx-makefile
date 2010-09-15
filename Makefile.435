@@ -43,6 +43,6 @@ MPFR_CONF = --disable-shared --with-gmp=$(LIB_DIR)
 AVRGCC_CONF = --disable-nsl --enable-languages=c,c++ --disable-libssp --disable-dependency-tracking --disable-werror --with-dwarf2 --enable-thread=single --with-gmp=$(LIB_DIR) --with-mpfr=$(LIB_DIR) --build=x86_64-apple-darwin10 --host=x86_64-apple-darwin10
 include ./Makefile.master
 
-patchgcc435:
+localpatches:
 	cd $(BUILD_DIR)gcc-4.3.5/gcc/cp && patch $(BUILD_DIR)/gcc-$(AVRGCC_VER)/gcc/cp/Make-lang.in libbackend.patch
  

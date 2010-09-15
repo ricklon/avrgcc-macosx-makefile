@@ -42,7 +42,7 @@ AVRGCC_CONF ?= --disable-nsl --enable-languages=c,c++ --disable-libssp --disable
 
 
 #Doesn't include getsources, and unpacksource, need a rule for that.
-all: unpacksources.t build-gmp install-gmp build-mpfr install-mpfr build-mpc install-mpc build-binutils install-binutils build-libtool install-libtool build-linkprereqs build-avrgccgxx install-avrgccgxx build-avrlibc install-avrlibc
+all: unpacksources.t localpatches  build-gmp install-gmp build-mpfr install-mpfr build-mpc install-mpc build-binutils install-binutils build-libtool install-libtool build-linkprereqs build-avrgccgxx install-avrgccgxx build-avrlibc install-avrlibc
 
 setup.t:
 	$(MKDIR) $(CURDIR)/src

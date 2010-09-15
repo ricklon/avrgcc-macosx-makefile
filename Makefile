@@ -34,3 +34,6 @@ SIMULAVR = 0.1.2.6
 AVRGCC_CONF = --disable-nsl --enable-languages=c,c++ --disable-libssp --disable-dependency-tracking --disable-werror --with-dwarf2 --enable-thread=single 
 
 include ./Makefile.master
+
+localpatches:
+	echo "local patches"
