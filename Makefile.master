@@ -70,7 +70,7 @@ unpacksources.t: getsources.t
 	tar xvjf $(CURDIR)/src/gmp-$(GMP_VER).tar.bz2  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/mpc-$(MPC_VER).tar.gz  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/mpfr-$(MPFR_VER).tar.gz  -C $(CURDIR)/build
-	cd  $(CURDIR)/build/mpfr-$(MPFR_VER) && curl http://www.mpfr.org/mpfr-$(MPFR_VER)/allpatches | patch -N -Z -p1
+	cd  $(CURDIR)/build/mpfr-$(MPFR_VER) && curl -O http://www.mpfr.org/mpfr-$(MPFR_VER)/allpatches | patch -N -Z -p1
 	tar xvzf $(CURDIR)/src/binutils-$(BINUTILS_VER).tar.gz  -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/libtool-$(LIBTOOL_VER).tar.gz -C $(CURDIR)/build
 	tar xvzf $(CURDIR)/src/gcc-core-$(AVRGCC_VER).tar.gz  -C $(CURDIR)/build
