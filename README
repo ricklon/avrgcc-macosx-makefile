@@ -1,6 +1,6 @@
 # 
 # This is a makefile that allows you to configure the versions of the source code and install directories for avr-gcc#
-#
+#avr bugs all open and closed since 4.3.5 http://tinyurl.com/23wjmhv good source of patches
 #Assumptions: curl is installed
 #You are familiar sudo, because the install targets use sudo for installing to the system
 #You will put the executables in the PATH appropriately
