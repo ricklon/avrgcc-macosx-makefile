@@ -1,6 +1,5 @@
 # 
 # This is a makefile that allows you to configure the versions of the source code and install directories for avr-gcc#
-#avr bugs all open and closed since 4.3.5 http://tinyurl.com/23wjmhv good source of patches
 #Assumptions: curl is installed
 #You are familiar sudo, because the install targets use sudo for installing to the system
 #You will put the executables in the PATH appropriately
@@ -18,9 +17,9 @@ make -f Makefile.435
 About 20 minutes later you should have a working locally compiled binary version of avr gcc.
 
 
-For quick reference all open avr bugs can be found using this url:
-http://gcc.gnu.org/bugzilla/buglist.cgi?query_format=advanced&short_desc_type=allwordssubstr&short_desc=avr&known_to_fail_type=allwordssubstr&known_to_work_type=allwordssubstr&long_desc_type=substring&long_desc=&bug_file_loc_type=allwordssubstr&bug_file_loc=&gcchost_type=allwordssubstr&gcchost=&gcctarget_type=allwordssubstr&gcctarget=&gccbuild_type=allwordssubstr&gccbuild=&keywords_type=allwords&keywords=&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=SUSPENDED&bug_status=WAITING&bug_status=REOPENED&emailassigned_to1=1&emailtype1=substring&email1=&emailassigned_to2=1&emailreporter2=1&emailcc2=1&emailtype2=substring&email2=&bugidtype=include&bug_id=&votes=&chfieldfrom=&chfieldto=Now&chfieldvalue=&field0-0-0=noop&type0-0-0=noop&value0-0-0=&order=bugs.version,bugs.bug_id&query_based_on=
-
+For quick reference all open avr gcc bugs can be found using this url:
+#gcc avr bugs all open and closed since 4.3.5 http://tinyurl.com/23wjmhv good source of patches
+avr libc open bugs: http://savannah.nongnu.org/bugs/?group=avr-libc
 
 MORE DEATILS:
 
