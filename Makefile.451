@@ -44,4 +44,6 @@ include ./Makefile.master
 
 localpatches:
 	#patch  $(BUILD_DIR)/gcc-$(AVRGCC_VER)/gcc/cp/Make-lang.in libbackend.patch
- 
+	#Bug: 45291 http://gcc.gnu.org/bugzilla/show_bug.cgi?id=45291 Desc: fix avr miscompiles for 4.5.1
+	cd $(BUILD_DIR)/gcc-$(AVRGCC_VER) && curl -L http://gcc.gnu.org/bugzilla/attachment.cgi?id=21484 -o 45291.patch
+	cd $(BUILD_DIR)/gcc-$(AVRGCC_VER) && patch -p1 < 45291.patch
