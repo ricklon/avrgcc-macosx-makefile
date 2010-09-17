@@ -16,7 +16,7 @@ AVRGCC_VER = 4.5.1
 #gcc-g++, should normally be the same as AVRGCC_VER
 AVRLIBC_VER = 1.7.0
 BINUTILS_VER = 2.20.1
-AVRDUDE_VER = 5.4
+AVRDUDE_VER = 5.10
 GDB_VER = 7.1
 GMP_VER = 5.0.1
 MPC_VER = 0.8.2

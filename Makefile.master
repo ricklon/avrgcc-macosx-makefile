@@ -83,7 +83,10 @@ unpacksources.t: getsources.t
 	tar xvzf $(CURDIR)/src/simulavr-$(SIMULAVR_VER).tar.gz -C $(CURDIR)/build
 	touch unpacksources.t
 
-	
+getavrdude:
+	cd $(CURDIR)/src && curl -O http://mirror.its.uidaho.edu/pub/savannah/avrdude/avrdude-$(AVRDUDE_VER).tar.gz
+	tar xvzf $(CURDIR)/src/avrdude-$(AVRDUDE_VER).tar.gz -C $(CURDIR)/build
+
 #build-prereqs: build-gmp build-mpfr build-mpc
 #Because these prereq libraries are built as part of the gcc source, that don't need to be installed after being built
 build-gmp:
