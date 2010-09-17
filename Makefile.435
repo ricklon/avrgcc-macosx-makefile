@@ -48,6 +48,3 @@ localpatches:
 	# Bug: 45263 http://gcc.gnu.org/bugzilla/show_bug.cgi?id=45263
 	cd $(BUILD_DIR)/gcc-$(AVRGCC_VER) && curl -L http://gcc.gnu.org/bugzilla/attachment.cgi?id=21461 -o 45263.patch
 	cd $(BUILD_DIR)/gcc-$(AVRGCC_VER) && patch -p1 < 45263.patch
-~ 
-
- 
