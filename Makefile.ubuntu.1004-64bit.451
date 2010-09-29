@@ -1,0 +1,53 @@
+# Put your custom version and overide default directories as needed
+# Ubuntu 10.04 64 bit
+# Package required Texinfo
+# sudo apt-get install texinfo
+#
+
+#setup defaults values
+#BUILD_DIR ?= build
+OUT_DIR ?= out
+LIB_DIR ?= $(CURDIR)/$(OUT_DIR)
+#INSTALL_DIR ?= $(CURDIR)/$(OUT_DIR)
+
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LIB_DIR
+
+#Setup versions of the required software
+#gcc-core
+AVRGCC_VER = 4.5.1
+#gcc-g++, should normally be the same as AVRGCC_VER
+AVRLIBC_VER = 1.7.0
+BINUTILS_VER = 2.20.1
+AVRDUDE_VER = 5.10
+GDB_VER = 7.1
+GMP_VER = 5.0.1
+MPC_VER = 0.8.2
+MPFR_VER = 3.0.0
+LIBTOOL_VER = 2.2.10
+AVARICE_VER = 2.10
+LIBUSB_VER = 0.1.12
+SIMULAVR = 0.1.2.6
+
+BINUTILS_CONF = --disable-nsl --disable-werror
+GMP_CONF = --disable-shared
+MPFR_CONF = --disable-shared --with-gmp=$(LIB_DIR)
+#AVRGCC_CONF = --disable-nsl --enable-languages=c,c++ --disable-libssp --disable-dependency-tracking --disable-werror --with-dwarf2 --enable-thread=single 
+#http://gcc.gnu.org/bugzilla/show_bug.cgi?id=41180
+#--build=x86_64-apple-darwin10 --host=x86_64-apple-darwin10 ##--target=x86_64-apple-darwin10
+#Also, claims need CC -m32 , not tried
+#Did the following an success compile occured, edit line 76 in gcc/cp/Make-lang.in to remove tree-inline.o from CXX_C_OBJS  , from this recomendation: https://trac.macports.org/ticket/20816
+
+AVRGCC_CONF = --disable-nsl --enable-languages=c,c++ --disable-libssp --disable-dependency-tracking --disable-werror --with-dwarf2 --enable-thread=single --with-gmp=$(LIB_DIR) --with-mpfr=$(LIB_DIR) 
+include ./Makefile.master
+
+all: unpacksources.t localpatches  build-binutils install-binutils  build-linkprereqs build-avrgccgxx install-avrgccgxx build-avrlibc install-avrlibc
+
+localpatches:
+	#patch  $(BUILD_DIR)/gcc-$(AVRGCC_VER)/gcc/cp/Make-lang.in libbackend.patch
+	# Bug: 45263 http://gcc.gnu.org/bugzilla/show_bug.cgi?id=45263
+	#Need to be applied to appropriate predecessor
+	#cd $(BUILD_DIR)/gcc-$(AVRGCC_VER) && curl -L http://gcc.gnu.org/bugzilla/attachment.cgi?id=21461 -o 45263.patch
+	#cd $(BUILD_DIR)/gcc-$(AVRGCC_VER) && patch -p1 < 45263.patch
+	#Bug: 45291 http://gcc.gnu.org/bugzilla/show_bug.cgi?id=45291 Desc: fix avr miscompiles for 4.5.1
+	#cd $(BUILD_DIR)/gcc-$(AVRGCC_VER) && curl -L http://gcc.gnu.org/bugzilla/attachment.cgi?id=21484 -o 45291.patch
+	#cd $(BUILD_DIR)/gcc-$(AVRGCC_VER) && patch -p1 < 45291.patch
