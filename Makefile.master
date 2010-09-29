@@ -141,10 +141,9 @@ install-libtool:
 
 build-linkprereqs:
 	#Build the libraries then symlink to tmp build directories for easier compilationg, because reference the libraries is not working yet. 
-	$(shell cd build/gcc-$(AVRGCC_VER);\
-	ln -s ../mpfr-$(MPFR_VER) mpfr;\
-	ln -s ../mpc-$(MPC_VER)/ mpc;\
-	ln -s ../gmp-$(GMP_VER)/ gmp;\)
+	cd build/gcc-$(AVRGCC_VER) && ln -s ../mpfr-$(MPFR_VER) mpfr
+	cd build/gcc-$(AVRGCC_VER) && ln -s ../mpc-$(MPC_VER)/ mpc
+	cd build/gcc-$(AVRGCC_VER) && ln -s ../gmp-$(GMP_VER)/ gmp
 
 build-avrgccgxx:
 	$(MKDIR) build/gcc-$(AVRGCC_VER)/tmp
